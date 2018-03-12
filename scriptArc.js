@@ -1,19 +1,16 @@
+/********Declaration des variables globales************/ 
 var draw1;
 var value= 'Circle';
 var selectArc;
 
 
+/************************Fonction de dessin de l'arc de cercle**********************************/
+
 function dessinArc(){
-
-
-
 var geometryFunction =function(coordinate,  arc) {
  if ( !arc) {
-// arc = new ol.geom.Polygon(0);
  arc = new ol.geom.Polygon(0);
-}
-
-
+ }
   var point = coordinate[1]; //point de dÃ©part
   var radius = document.formu.distance.value*1852; //taille des segments
   var newCoordinates = []; //Tableau pour stoker les coordonnÃ©es des nouveaux points
@@ -66,11 +63,12 @@ newCoordinates.push(  [point[0] + offsetX, point[1] + offsetY],  [point[0], poin
   map.addInteraction(draw1);
 
 }
+/**************************************************************************************************/
 
 
 
+/*****************Fonction de déplacement de l'arc***************************/
 
-//Fonction de déplacement de l'arc
 function deplacer(draw){
 map.removeInteraction(draw);
 
@@ -88,7 +86,10 @@ var translate = new ol.interaction.Translate({
   map.addInteraction(translate);
 }
 
-//fonction pour désactiver le dessin 
+
+
+/*******************fonction pour désactiver le dessin**********************************/ 		
+
 function desactiver(){
    map.removeInteraction(draw1);
 }
@@ -96,12 +97,11 @@ function desactiver(){
 
 
 
-//fonction de style
+/******************fonction de style************************************/
+
 function appliquerStyle(){
 
-
-
-//**** l'objet arcs
+//l'objet arcs
 var arcs = new ol.Feature({
     type: (value),
     geometryFunction: dessinArc()
@@ -117,8 +117,6 @@ var largeur = document.getElementById('epai');
 
 
 var source = new ol.source.Vector({
-        //features:selectArc.getFeatures(),
-
          features:[arcs],
          wrapX: false
 
@@ -130,15 +128,8 @@ var opacite = document.getElementById('opacite');
         opacity : opacite.value,
         style: newstyle,
         source: source
-      //style: (typeSelect.onchange =changestyle())
-        });
-
-
-
-
+                });
 var newstyle=function changestyle(){
-
-
     var contour = strokeSelect.value;
     var remplissage=fillSelect.value;
     
@@ -152,16 +143,13 @@ var newstyle=function changestyle(){
     return arcStyles ;
 }
 
- 	var selectArc1 = new ol.interaction.Select({
+var selectArc1 = new ol.interaction.Select({
        	style : newstyle,
         condition: ol.events.condition.click,
-
-    });
-
-
- 	map.removeInteraction(draw1);
+ });
+	map.removeInteraction(draw1);
  	map.removeInteraction(selectArc);
  	map.addInteraction(selectArc1);
  	arcs.setStyle(newstyle);
 	
-}
+} //Fin de la fonction appliquerStyle()

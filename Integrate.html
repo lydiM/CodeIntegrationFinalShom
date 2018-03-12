@@ -23,68 +23,42 @@
 	<option value="None">None</option>
 	</select>
 </form>
-<!--Formulaire à masquer>-->
+
+<!--Formulaire à afficher pour le dessin de l'arc de cercle >-->
+
 <div id="menuArc" style="display: none">
 	<form name="formu">
 		<br />
 		<label>Angle1</label> <input id="ang1" name="angle1" type="text" />
-		<!--Champs pour saisir le premier angle--><label>Angle2</label>:
-		<input id="ang2" name="angle2" type="text" /> <br />
+		<label>Angle2</label> <input id="ang2" name="angle2" type="text" /> <br />
 		<br />
 		<label>Distance en miles</label>:
 		<input id="dist" name="distance" type="text" />
 		<input onclick="dessinArc()" type="button" value="Dessiner angle"><br></br>
-		<label> Pour deplacer le dessin </label>:	<input type='button' onClick='deplacer(draw)' value='Cliquez ici' ><br>
-		</br>
+		<label> Pour deplacer le dessin </label>:	<input type='button' onClick='deplacer(draw)' value='Cliquez ici' ><br></br>
 		<label> Pour desactiver le dessin </label>:	<input type='button' onClick='desactiver()' value='Cliquez ici' ><br></br>
 		<label> Contour</label>
 		<hr color="blue" align=left style="width: 66%">
-		
-
 		<label>Couleur  </label>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-		<label>Opacite </label>
-		<br>
+		<label>Opacite </label> 	<br>
 		<input id="menuC" type="color" />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-		
-		 <input id="opacite" type="range" min="0" max="1" step="0.1"  >
-
-		<br><br><br>
-
-
+        <input id="opacite" type="range" min="0" max="1" step="0.1"  >	<br><br><br>
 		<label> Remplissage</label>
-		<hr width="66%" color="blue" align=left>
-
-		
-		
-		<br>
-		<br>
-			<label>Couleur  </label>
+		<hr width="66%" color="blue" align=left><br><br>
+		<label>Couleur  </label>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-		<label>Opacite </label>
+    	<label>Opacite </label>
 		<br>
-
 		<input id="menuR" type="color" />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-		
-		 <input id="opacite" type="range" min="0" max="1" step="0.1"  >
-
-		
-		<br><br>
-		
+		<input id="opacite" type="range" min="0" max="1" step="0.1"  > <br><br>
 	    <input type='button' onClick='appliquerStyle()' value='Appliquer' >
-
-
 	</form>
 </div>
 
+<!--Formulaire à afficher pour la ligne de mesure >-->
 <div id="menuLigne" style="display: none">
 	<form name="form">
 		<br />
@@ -93,7 +67,9 @@
 		<br />	<br />
 		<label>L'azimut </label>: <input id="azimut" type="text" name="angle1" /><label>degres</label>
 		<br/>	<br />
-		<label>Distance en miles</label>: <input id="distanceLigne" type="text" name="distance" />
+		<label>Distance en miles</label>: <input id="distanceLigne" type="text" name="distance" /><br></br>
+		<label> Pour desactiver le dessin </label>:	<input type='button' onClick='desactiver()' value='Cliquez ici' ><br></br>
+
 	</form>
 </div>
 
@@ -104,7 +80,8 @@
 
 <script>
     
-   //Fonction qui affiche le formulaire Ã  l'appuie sur Arc
+   //Fonction qui affiche un formulaire
+   
     function masquer_div(id)
     {
       if (document.getElementById(id).style.display == "none")
@@ -117,8 +94,8 @@
       }
     }
 	
-
-    
+     
+    //Déclaration  de la Map
       var raster = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
@@ -141,48 +118,40 @@
 
       var typeSelect = document.getElementById('type');
 
-      var draw; // global so we can remove it later
+      var draw; 
+            
+      // Ajout des valeur Arc pour le dessin de l'arc et Mesure pour la ligne de mesure 
       
       function addInteraction() {
     	  
         var value = typeSelect.value;
-        
+ 
         if (value !== 'None') {
         	
         	if(value=='Arc'){
-        	
+ 
                document.getElementById("menuLigne").style.display = "none";
-
-
-        		masquer_div("menuArc");
-        	   // draw=dessin();   	
-        	    // map.addInteraction(draw);
-
-        	    
-        	}else if (value=='Mesure'){
+               masquer_div("menuArc");
+        	 
+        	 }else if (value=='Mesure'){
         	    document.getElementById("menuArc").style.display = "none";
-
-        	
-        		masquer_div("menuLigne"); 	
+				masquer_div("menuLigne"); 	
         	}
         	
         	else
         	{
-		
-        	
-        
-       	 	    map.removeInteraction(draw);
+				
        	  		//Masquer le formulaire
-         
-         	 document.getElementById("menuArc").style.display = "none";
-    
-   
-          draw = new ol.interaction.Draw({
-            source: source,
-            type: typeSelect.value
-          });
-          map.addInteraction(draw);
-        	}
+        	    document.getElementById("menuLignes").style.display = "none";
+				document.getElementById("menuArc").style.display = "none";
+    			map.removeInteraction(draw);
+   				
+                draw = new ol.interaction.Draw({
+                   source: source,
+                  type: typeSelect.value
+                });
+                map.addInteraction(draw);
+        	    }
         	
         	}
         else 
